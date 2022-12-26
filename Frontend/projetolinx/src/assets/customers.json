@@ -1,0 +1,14 @@
+[
+    {
+        "Name" : "Stone Pagamentos",
+        "Cpf" : "18389762056",
+        "AddressDto" : {
+            "Street": "Quadra F Dois",
+            "City": "Canoas",
+            "State": "RS",
+            "Neighborhood" : "Guajuviras",
+            "Number": "1087",
+            "Cep": "92440-026"
+        }
+    }	
+]
