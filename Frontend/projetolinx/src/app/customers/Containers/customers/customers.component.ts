@@ -3,8 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, Observable, of } from 'rxjs';
 import { ErrorDialogComponent } from 'src/app/shared/components/error-dialog/error-dialog.component';
-import { Customer } from '../Models/customer';
-import { CustomersService } from '../services/customers.service';
+import { Customer } from '../../Models/customer';
+import { CustomersService } from '../../services/customers.service';
 
 @Component({
   selector: 'app-customers',
@@ -15,7 +15,6 @@ export class CustomersComponent implements OnInit {
 
   customers$: Observable<Customer[]>;
   customerAny: any[] = [];
-  displayedColumns = ['name', 'cpf', 'actions'];
 
   constructor(
       private customerService: CustomersService,
@@ -43,6 +42,10 @@ export class CustomersComponent implements OnInit {
 
   onAdd(){
     this.router.navigate(['new'], {relativeTo: this.route})
+  }
+
+  onEdit(customer: Customer){
+    this.router.navigate(['edit', '1'], {relativeTo: this.route})
   }
 }
 

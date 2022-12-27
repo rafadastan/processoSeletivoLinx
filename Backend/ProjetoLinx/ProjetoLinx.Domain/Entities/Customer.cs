@@ -11,9 +11,18 @@ namespace ProjetoLinx.Domain.Entities
 {
     public class Customer : IBaseValidations
     {
-        public Guid CustomerId { get; set; }
-        public string Name { get; set; }
-        public string Cpf { get; set; }
+        public Customer(Guid customerId, 
+            string name, 
+            string cpf)
+        {
+            CustomerId = customerId;
+            Name = name;
+            Cpf = cpf;
+        }
+
+        public Guid CustomerId { get; private set; }
+        public string Name { get; private set; }
+        public string Cpf { get; private set; }
 
         public Address Address { get; set; }
 

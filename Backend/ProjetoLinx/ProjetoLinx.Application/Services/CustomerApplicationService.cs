@@ -66,6 +66,13 @@ namespace ProjetoLinx.Application.Services
                 return;
         }
 
+        public async Task<CustomerDto> GetByCustomer(Guid customerId)
+        {
+            var customer = await _customerDomainService.GetByCustomer(customerId);
+
+            return _mapper.Map<CustomerDto>(customer);
+        }
+
         public async Task<List<CustomerDto>> GetAllCustomerAsync()
         {
             var customerList = await _customerDomainService.GetAll();

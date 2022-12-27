@@ -28,15 +28,26 @@ namespace ProjetoLinx.Infra.Repositories
                 join address in _sqlContext.Address
                     on customer.CustomerId equals address.CustomerId
                 where address.CustomerId.Equals(customer.CustomerId)
-                select new Customer
+                select new Customer(customer.CustomerId, customer.Name, customer.Cpf)
                 {
-                    CustomerId = customer.CustomerId,
-                    Name = customer.Name,
-                    Cpf = customer.Cpf,
                     Address = address
                 };
 
             return query.ToList();
+        }
+
+        public async Task<Customer> GetByCustomer(Guid customerId)
+        {
+            var query = from customer in _sqlContext.Customer
+                join address in _sqlContext.Address
+                    on customer.CustomerId equals address.CustomerId
+                where customer.CustomerId.Equals(customerId)
+                select new Customer(customer.CustomerId, customer.Name, customer.Cpf)
+                {
+                    Address = address
+                };
+
+            return await Task.FromResult(query.FirstOrDefault());
         }
     }
 }

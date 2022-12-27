@@ -19,29 +19,29 @@ namespace ProjetoLinx.Domain.Services
             _repository = repository;
         }
 
-        public virtual Task Create(T entity)
+        public virtual async Task Create(T entity)
         {
-            return _repository.Insert(entity);
+            await _repository.Insert(entity);
         }
 
-        public virtual Task Delete(T entity)
+        public virtual async Task Delete(T entity)
         {
-            return _repository.Delete(entity);
+            await _repository.Delete(entity);
         }
 
-        public virtual Task Update(T entity)
+        public virtual async Task Update(T entity)
         {
-            return _repository.Update(entity);
+            await _repository.Update(entity);
         }
 
-        public virtual Task<List<T>> GetAll()
+        public virtual async Task<List<T>> GetAll()
         {
-            return _repository.GetAll();
+            return await _repository.GetAll();
         }
 
-        public virtual Task<T> GetById(TKey entity)
+        public virtual async Task<T> GetById(TKey entity)
         {
-            return _repository.GetById(entity);
+            return await _repository.GetById(entity);
         }
     }
 }

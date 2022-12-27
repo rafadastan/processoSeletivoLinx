@@ -41,7 +41,7 @@ namespace ProjetoLinx.Domain.Services
                     return null;
                 }
 
-                customer.Address = await _addressRepository.Insert(customer.Address);
+                await _addressRepository.Insert(customer.Address);
                 if (_notificationContext.HasNotifications)
                 {
                     await _unitOfWork.RollBack();
@@ -55,6 +55,16 @@ namespace ProjetoLinx.Domain.Services
             return customer;
         }
 
+        public async Task<Customer> GetByCustomer(Guid customerId)
+        {
+            var customer = await _customerRepository.GetByCustomer(customerId);
+
+            if (customer == null)
+                _notificationContext.AddNotification(customerId.ToString(), "Erro ao buscar cliente.");
+
+            return _notificationContext.HasNotifications ? null : customer;
+        }
+
         public override async Task<List<Customer>> GetAll()
         {
             var customerList = await _customerRepository.GetAllCustomers();
@@ -63,6 +73,11 @@ namespace ProjetoLinx.Domain.Services
                 _notificationContext.AddNotification(Guid.NewGuid().ToString(), "Erro ao buscar cliente.");
 
             return _notificationContext.HasNotifications ? null : customerList;
+        }
+
+        public override async Task<Customer> GetById(Guid entity)
+        {
+            return await base.GetById(entity);
         }
     }
 }

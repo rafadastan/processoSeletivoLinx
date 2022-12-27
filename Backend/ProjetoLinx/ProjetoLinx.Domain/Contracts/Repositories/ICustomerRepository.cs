@@ -10,5 +10,6 @@ namespace ProjetoLinx.Domain.Contracts.Repositories
     public interface ICustomerRepository : IBaseRepository<Customer, Guid>
     {
         Task<List<Customer>> GetAllCustomers();
+        Task<Customer> GetByCustomer(Guid customerId);
     }
 }

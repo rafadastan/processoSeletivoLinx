@@ -10,5 +10,6 @@ namespace ProjetoLinx.Domain.Contracts.Services
     public interface ICustomerDomainService : IBaseDomainService<Customer, Guid>
     {
         Task<Customer> CreateCustomerAsync(Customer customer);
+        Task<Customer> GetByCustomer(Guid customerId);
     }
 }

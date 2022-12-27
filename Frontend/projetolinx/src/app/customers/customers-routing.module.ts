@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CustomerFormComponent } from './customer-form/customer-form.component';
-import { CustomersComponent } from './customers/customers.component';
+import { CustomerFormComponent } from './Containers/customer-form/customer-form.component';
+import { CustomersComponent } from './Containers/customers/customers.component';
+import { CustomerResolver } from './guards/customer.resolver';
 
 const routes: Routes = [
   {path: '', component: CustomersComponent},
-  {path: 'new', component: CustomerFormComponent}
+  {path: 'new', component: CustomerFormComponent, resolve: {customer: CustomerResolver}},
+  {path: 'edit/:id', component: CustomerFormComponent, resolve: {customer: CustomerResolver}}
 ];
 
 @NgModule({

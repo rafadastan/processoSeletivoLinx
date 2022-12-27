@@ -22,7 +22,12 @@ export class CustomersService {
     );
   }
 
-  createCustomers(data: Customer){
+  createCustomers(data: Partial<Customer>){
     return this.httpClient.post<Customer>(this.resource, data);
   }
+
+  getCustomer(id: string){
+    return this.httpClient.get<Customer>(`${this.resource}/${id}`);
+  }
+
 }

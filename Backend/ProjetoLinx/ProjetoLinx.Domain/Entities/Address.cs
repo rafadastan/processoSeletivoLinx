@@ -11,14 +11,33 @@ namespace ProjetoLinx.Domain.Entities
 {
     public class Address : IBaseValidations
     {
-        public Guid AddressId { get; set; }
-        public Guid CustomerId { get; set; }
-        public string Street { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
-        public string Neighborhood { get; set; }
-        public string Number { get; set; }
-        public string Cep { get; set; }
+        public Address(Guid addressId, 
+            Guid customerId, 
+            string street, 
+            string city, 
+            string state, 
+            string neighborhood, 
+            string number, 
+            string cep)
+        {
+            AddressId = addressId;
+            CustomerId = customerId;
+            Street = street;
+            City = city;
+            State = state;
+            Neighborhood = neighborhood;
+            Number = number;
+            Cep = cep;
+        }
+
+        public Guid AddressId { get; private set; }
+        public Guid CustomerId { get; private set; }
+        public string Street { get; private set; }
+        public string City { get; private set; }
+        public string State { get; private set; }
+        public string Neighborhood { get; private set; }
+        public string Number { get; private set; }
+        public string Cep { get; private set; }
 
         public Customer Customer { get; set; }
 

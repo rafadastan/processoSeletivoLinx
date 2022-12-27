@@ -3,18 +3,20 @@ import { CommonModule } from '@angular/common';
 
 
 import { CustomersRoutingModule } from './customers-routing.module';
-import { CustomersComponent } from './customers/customers.component';
+import { CustomersComponent } from './Containers/customers/customers.component';
 import { AppMaterialModule } from '../shared/app-material/app-material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../shared/shared.module';
-import { CustomerFormComponent } from './customer-form/customer-form.component';
+import { CustomerFormComponent } from './Containers/customer-form/customer-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CustomersListComponent } from './Components/customers-list/customers-list.component';
 
 
 @NgModule({
   declarations: [
     CustomersComponent,
-    CustomerFormComponent
+    CustomerFormComponent,
+    CustomersListComponent
   ],
   imports: [
     CommonModule,

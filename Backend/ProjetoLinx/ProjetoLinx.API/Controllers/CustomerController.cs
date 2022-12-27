@@ -46,5 +46,20 @@ namespace ProjetoLinx.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(BadRequestResult), 400)]
+        [ProducesResponseType(typeof(BadHttpRequestException), 500)]
+        public async Task<IActionResult> GetByCustomer(Guid id)
+        {
+            var result = await _customerApplicationService.GetByCustomer(id);
+
+            if (result == null)
+                return NoContent();
+
+            return Ok(result);
+            
+        }
     }
 }

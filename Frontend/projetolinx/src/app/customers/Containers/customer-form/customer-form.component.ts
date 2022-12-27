@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { NonNullableFormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CustomersService } from '../services/customers.service';
+import { CustomersService } from '../../services/customers.service';
 import { Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-customer-form',
@@ -11,19 +12,19 @@ import { Location } from '@angular/common';
 })
 export class CustomerFormComponent implements OnInit {
 
-  form: FormGroup;
+  form = this.formBuilder.group({
+    name: [''],
+    cpf: ['']
+  });
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: NonNullableFormBuilder,
     private customerService: CustomersService,
     private snackBar: MatSnackBar,
-    private location: Location) {
-    this.form = this.formBuilder.group({
-      name: [null],
-      cpf: [null]
-    });
-  }
+    private location: Location,
+    private route: ActivatedRoute) {  }
 
   ngOnInit(): void {
+
   }
 
   onSubmit() {
