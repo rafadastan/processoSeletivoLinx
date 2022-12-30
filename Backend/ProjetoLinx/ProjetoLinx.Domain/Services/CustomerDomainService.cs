@@ -13,20 +13,21 @@ namespace ProjetoLinx.Domain.Services
     public class CustomerDomainService : BaseDomainService<Customer, Guid>, 
         ICustomerDomainService
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly ICustomerRepository _customerRepository;
         private readonly IAddressRepository _addressRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly NotificationContext _notificationContext;
 
-        public CustomerDomainService(IUnitOfWork unitOfWork, 
-            ICustomerRepository customerRepository, 
-            IAddressRepository addressRepository, 
+        public CustomerDomainService( 
+            ICustomerRepository customerRepository,
+            IAddressRepository addressRepository,
+            IUnitOfWork unitOfWork,
             NotificationContext notificationContext) 
             : base(unitOfWork.CustomerRepository)
         {
-            _unitOfWork = unitOfWork;
             _customerRepository = customerRepository;
             _addressRepository = addressRepository;
+            _unitOfWork = unitOfWork;
             _notificationContext = notificationContext;
         }
 
@@ -34,26 +35,50 @@ namespace ProjetoLinx.Domain.Services
         {
             using (var uow = _unitOfWork.BeginTransaction())
             {
-                customer = await _customerRepository.Insert(customer);
+                customer = await _unitOfWork.CustomerRepository.CreateCustomer(customer);
                 if (_notificationContext.HasNotifications)
                 {
                     await _unitOfWork.RollBack();
                     return null;
                 }
 
-                await _addressRepository.Insert(customer.Address);
-                if (_notificationContext.HasNotifications)
-                {
-                    await _unitOfWork.RollBack();
-                    return null;
-                }
                 await _unitOfWork.Commit();
-
                 await _unitOfWork.Save();
             }
-            
-            return customer;
+
+            return _notificationContext.HasNotifications ? null : customer;
         }
+
+        public async Task<Customer> UpdateCustomerAsync(Guid customerId, Customer customer)
+        {
+            var hasCustomer = await GetByCustomer(customerId);
+
+            if (hasCustomer == null)
+                _notificationContext
+                    .AddNotification(customerId.ToString(), "Cliente não existe");
+
+            if (_notificationContext.HasNotifications)
+                return null;
+
+            MapperUpdateCustomer(customerId, customer, hasCustomer);
+
+            using (var uow = _unitOfWork.BeginTransaction())
+            {
+                customer = await _unitOfWork.CustomerRepository.UpdateCustomer(customer);
+                if (_notificationContext.HasNotifications)
+                {
+                    await _unitOfWork.RollBack();
+                    return null;
+                }
+
+                await _unitOfWork.Commit();
+                await _unitOfWork.SaveAsync();
+            }
+            
+            return _notificationContext.HasNotifications ? null : customer;
+        }
+
+        
 
         public async Task<Customer> GetByCustomer(Guid customerId)
         {
@@ -77,7 +102,13 @@ namespace ProjetoLinx.Domain.Services
 
         public override async Task<Customer> GetById(Guid entity)
         {
-            return await base.GetById(entity);
+            return await _customerRepository.GetById(entity);
+        }
+
+        private void MapperUpdateCustomer(Guid customerId, Customer customer, Customer? hasCustomer)
+        {
+            customer.CustomerId = customerId;
+            if (hasCustomer != null) customer.Address.AddressId = hasCustomer.Address.AddressId;
         }
     }
 }

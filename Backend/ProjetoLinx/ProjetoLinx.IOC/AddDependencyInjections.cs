@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ProjetoLinx.Application.Contracts;
 using ProjetoLinx.Application.Services;
@@ -37,7 +38,10 @@ namespace ProjetoLinx.IOC
             //CrossCutting
 
             services.AddScoped<NotificationContext>();
-            
+
+
+            services.AddTransient<SqlContext>();
+
             return services;
         }
     }

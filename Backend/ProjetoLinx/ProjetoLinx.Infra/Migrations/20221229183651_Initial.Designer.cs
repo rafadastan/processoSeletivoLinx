@@ -12,8 +12,8 @@ using ProjetoLinx.Infra.Context;
 namespace ProjetoLinx.Infra.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    [Migration("20221223171316_InitialProjectLinx")]
-    partial class InitialProjectLinx
+    [Migration("20221229183651_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,56 +32,57 @@ namespace ProjetoLinx.Infra.Migrations
 
                     b.Property<string>("Cep")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Neighborhood")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Number")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("State")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Street")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("AddressId");
 
-                    b.HasIndex("CustomerId")
-                        .IsUnique();
-
-                    b.ToTable("Address");
+                    b.ToTable("Address", (string)null);
                 });
 
             modelBuilder.Entity("ProjetoLinx.Domain.Entities.Customer", b =>
                 {
                     b.Property<Guid>("CustomerId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Cpf")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("CustomerId");
 
-                    b.ToTable("Customer");
+                    b.ToTable("Customer", (string)null);
                 });
 
             modelBuilder.Entity("ProjetoLinx.Domain.Entities.User", b =>
@@ -92,35 +93,38 @@ namespace ProjetoLinx.Infra.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("UserId");
 
-                    b.ToTable("User");
-                });
-
-            modelBuilder.Entity("ProjetoLinx.Domain.Entities.Address", b =>
-                {
-                    b.HasOne("ProjetoLinx.Domain.Entities.Customer", "Customer")
-                        .WithOne("Address")
-                        .HasForeignKey("ProjetoLinx.Domain.Entities.Address", "CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("ProjetoLinx.Domain.Entities.Customer", b =>
                 {
-                    b.Navigation("Address")
+                    b.HasOne("ProjetoLinx.Domain.Entities.Address", "Address")
+                        .WithOne("Customer")
+                        .HasForeignKey("ProjetoLinx.Domain.Entities.Customer", "CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+                });
+
+            modelBuilder.Entity("ProjetoLinx.Domain.Entities.Address", b =>
+                {
+                    b.Navigation("Customer")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

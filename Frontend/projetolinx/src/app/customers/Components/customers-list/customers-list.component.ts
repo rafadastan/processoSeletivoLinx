@@ -11,8 +11,13 @@ export class CustomersListComponent implements OnInit {
   @Input() customers: Customer[] = [];
   @Output() add = new EventEmitter(false);
   @Output() edit = new EventEmitter(false);
+  @Output() remove = new EventEmitter(false);
   
-  readonly displayedColumns = ['name', 'cpf', 'actions'];
+  readonly displayedColumns = 
+  [
+    'name', 
+    'cpf', 
+    'actions'];
 
   constructor() { }
 
@@ -25,5 +30,9 @@ export class CustomersListComponent implements OnInit {
 
   onEdit(customer: Customer){
     this.edit.emit(customer);
+  }
+
+  onDelete(customer: Customer){
+    this.remove.emit(customer);
   }
 }

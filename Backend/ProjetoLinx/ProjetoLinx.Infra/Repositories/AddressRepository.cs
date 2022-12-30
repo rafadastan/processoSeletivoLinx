@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ProjetoLinx.Domain.Contracts.Repositories;
+﻿using ProjetoLinx.Domain.Contracts.Repositories;
 using ProjetoLinx.Domain.Entities;
 using ProjetoLinx.Infra.Context;
 using SUC.Domain.Notifications;
@@ -28,7 +22,7 @@ namespace ProjetoLinx.Infra.Repositories
         public async Task<Address> GetByCustomerIdAsync(Guid id)
         {
             var query = from address in _sqlContext.Address
-                where address.CustomerId == id
+                where address.AddressId == id
                 select address;
 
             return query.FirstOrDefault();

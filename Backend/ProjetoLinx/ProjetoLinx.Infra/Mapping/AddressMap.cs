@@ -13,13 +13,13 @@ namespace ProjetoLinx.Infra.Mapping
     {
         public void Configure(EntityTypeBuilder<Address> builder)
         {
-            builder.ToTable<Address>("Address");
+            builder.ToTable("Address");
 
             builder.HasKey(x => x.AddressId);
 
             builder.Property(x => x.AddressId)
                 .IsRequired();
-
+            
             builder.Property(x => x.Cep)
                 .HasMaxLength(10);
 
@@ -42,6 +42,12 @@ namespace ProjetoLinx.Infra.Mapping
             builder.Property(x => x.State)
                 .HasMaxLength(100)
                 .IsRequired();
+
+            builder.
+                HasOne(x => x.Customer)
+                .WithOne(c => c.Address)
+                .HasForeignKey<Customer>(x => x.CustomerId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

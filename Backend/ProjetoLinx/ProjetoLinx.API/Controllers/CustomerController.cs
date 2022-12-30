@@ -19,18 +19,42 @@ namespace ProjetoLinx.API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(CustomerDto), 200)]
+        [ProducesResponseType(typeof(CustomerModel), 200)]
         [ProducesResponseType(typeof(BadRequestResult), 400)]
         [ProducesResponseType(typeof(BadHttpRequestException), 500)]
-        public async Task<IActionResult> Post([FromBody] CustomerDto customerDto)
+        public async Task<IActionResult> Post([FromBody] CustomerModel customerModel)
         {
-            customerDto = await _customerApplicationService.CreateCustomerAsync(customerDto);
+            customerModel = await _customerApplicationService.CreateCustomerAsync(customerModel);
             
             return StatusCode(201, new
             {
                 Message = "Cliente criado com sucesso",
-                CustomerDto = customerDto
+                CustomerDto = customerModel
             });
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(typeof(CustomerDto), 200)]
+        [ProducesResponseType(typeof(BadRequestResult), 400)]
+        [ProducesResponseType(typeof(BadHttpRequestException), 500)]
+        public async Task<IActionResult> Put(Guid id, UpdateCustomer updateCustomer)
+        {
+            updateCustomer = await _customerApplicationService.UpdateCustomerAsync(id, updateCustomer);
+            return StatusCode(200, new
+            {
+                Message = "Usuario atualizado com sucesso.",
+                Customer = updateCustomer
+            });
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(CustomerDto), 200)]
+        [ProducesResponseType(typeof(BadRequestResult), 400)]
+        [ProducesResponseType(typeof(BadHttpRequestException), 500)]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            await _customerApplicationService.DeleteCustomerAsync(id);
+            return StatusCode(200, new { Message = "Usuario deletado com sucesso." });
         }
 
         [HttpGet]
@@ -59,7 +83,6 @@ namespace ProjetoLinx.API.Controllers
                 return NoContent();
 
             return Ok(result);
-            
         }
     }
 }

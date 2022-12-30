@@ -22,7 +22,7 @@ namespace ProjetoLinx.Infra.Repositories
         public virtual async Task<T> Insert(T obj)
         {
             _sqlContext.Entry(obj).State = EntityState.Added;
-            _sqlContext.SaveChanges();
+            await _sqlContext.SaveChangesAsync();
 
             return obj;
         }

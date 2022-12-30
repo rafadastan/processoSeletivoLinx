@@ -12,9 +12,9 @@ namespace ProjetoLinx.Domain.Validations
     {
         public AddressValidation()
         {
-            RuleFor(a => a.AddressId)
-                .NotEmpty()
-                .WithMessage("O Id não pode ser nulo");
+            //RuleFor(a => a.AddressId)
+            //    .NotEmpty()
+            //    .WithMessage("O Id não pode ser nulo");
 
             RuleFor(a => a.City)
                 .NotEmpty()

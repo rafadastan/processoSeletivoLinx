@@ -14,12 +14,28 @@ import { CustomersService } from '../services/customers.service';
 
 export class CustomerResolver implements Resolve<Customer> {
 
-  constructor(private customerService: CustomersService){}
+  constructor(private customerService: CustomersService) { }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Customer> {
-    if(route.params && route.params['id']){
+    if (route.params && route.params['id']) {
       return this.customerService.getCustomer(route.params['id']);
     }
-    return of({_id: '', name: '', cpf: ''});
+    return of(
+      {
+        customerId: '',
+        name: '',
+        cpf: '',
+        addressDto: { 
+          addressId: '',
+          customerId: '',
+          street: '',
+          city: '',
+          state: '',
+          neighborhood: '',
+          number: '',
+          cep: ''
+        }
+      }
+    );
   }
 }

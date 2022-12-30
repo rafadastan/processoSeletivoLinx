@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 using ProjetoLinx.Domain.Contracts.Repositories;
 using ProjetoLinx.Domain.Entities;
 using ProjetoLinx.Infra.Context;
 using SUC.Domain.Notifications;
+using EntityState = Microsoft.EntityFrameworkCore.EntityState;
 
 namespace ProjetoLinx.Infra.Repositories
 {
@@ -22,32 +18,45 @@ namespace ProjetoLinx.Infra.Repositories
             _sqlContext = sqlContext;
         }
 
+        public async Task<Customer> CreateCustomer(Customer customer)
+        {
+            _sqlContext.Customer.Add(customer);
+            _sqlContext.Address.Add(customer.Address);
+
+            _sqlContext.Entry(customer).State = EntityState.Added;
+
+            _sqlContext.SaveChanges();
+
+            return customer;
+        }
+
+        public async Task<Customer> UpdateCustomer(Customer customer)
+        {
+            _sqlContext.Customer.Update(customer);
+            _sqlContext.Address.Update(customer.Address);
+
+            await _sqlContext.SaveChangesAsync();
+            
+            return customer;
+        }
+
         public async Task<List<Customer>> GetAllCustomers()
         {
-            var query = from customer in _sqlContext.Customer
-                join address in _sqlContext.Address
-                    on customer.CustomerId equals address.CustomerId
-                where address.CustomerId.Equals(customer.CustomerId)
-                select new Customer(customer.CustomerId, customer.Name, customer.Cpf)
-                {
-                    Address = address
-                };
+            var query = _sqlContext
+                .Customer
+                .Include(c => c.Address)
+                .ToList();
 
-            return query.ToList();
+            return query;
         }
 
         public async Task<Customer> GetByCustomer(Guid customerId)
         {
-            var query = from customer in _sqlContext.Customer
-                join address in _sqlContext.Address
-                    on customer.CustomerId equals address.CustomerId
-                where customer.CustomerId.Equals(customerId)
-                select new Customer(customer.CustomerId, customer.Name, customer.Cpf)
-                {
-                    Address = address
-                };
-
-            return await Task.FromResult(query.FirstOrDefault());
+            var query = _sqlContext.Customer
+                .Include(c => c.Address)
+                .FirstOrDefault(c => c.CustomerId == customerId);
+            
+            return await Task.FromResult(query);
         }
     }
 }

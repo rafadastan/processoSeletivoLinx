@@ -3,44 +3,99 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using ProjetoLinx.Application.Contracts;
 using ProjetoLinx.Application.DTO;
+using ProjetoLinx.Application.Model;
 using ProjetoLinx.Domain.Contracts.Services;
+using ProjetoLinx.Domain.Entities;
+using SUC.Domain.Notifications;
 
 namespace ProjetoLinx.Application.Services
 {
     public class AddressApplicationService : IAddressApplicationService
     {
         private readonly IAddressDomainService _addressDomainService;
+        private readonly IMapper _mapper;
+        private readonly NotificationContext _notificationContext;
 
-        public AddressApplicationService(IAddressDomainService addressDomainService)
+        public AddressApplicationService(
+            IAddressDomainService addressDomainService, 
+            IMapper mapper, 
+            NotificationContext notificationContext)
         {
             _addressDomainService = addressDomainService;
+            _mapper = mapper;
+            _notificationContext = notificationContext;
         }
 
-        public Task<AddressDto> CreateAddressAsync(AddressDto address)
+        public async Task<AddressDto> CreateAddressAsync(AddressDto addressDto)
         {
-            throw new NotImplementedException();
+            var address = _mapper.Map<Address>(addressDto);
+
+            address = await _addressDomainService.CreateAddress(address);
+            if (_notificationContext.HasNotifications)
+                return null;
+
+            var response = new AddressDto
+            {
+                Street = address.Street,
+                City = address.City,
+                State = address.State,
+                Neighborhood = address.Neighborhood,
+                Number = address.Number,
+                Cep = address.Cep
+            };
+
+            return _notificationContext.HasNotifications ? null : response;
         }
 
-        public Task<AddressDto> UpdateAddressAsync(CustomerDto address)
+        public async Task<AddressDto> UpdateAddressAsync(AddressDto addressDto)
         {
-            throw new NotImplementedException();
+            var address = _mapper.Map<Address>(addressDto);
+
+            address = await _addressDomainService.UpdateAddress(address);
+            if (_notificationContext.HasNotifications)
+                return null;
+
+            var response = new AddressDto
+            {
+                Street = address.Street,
+                City = address.City,
+                State = address.State,
+                Neighborhood = address.Neighborhood,
+                Number = address.Number,
+                Cep = address.Cep
+            };
+
+            return _notificationContext.HasNotifications ? null : response;
         }
 
-        public Task<AddressDto> DeleteAddressAsync(Guid addressId)
+        public async Task DeleteAddressAsync(Guid addressId)
         {
-            throw new NotImplementedException();
+            var addressDto = GetById(addressId);
+
+            if (addressDto != null)
+            {
+                var address = _mapper.Map<Address>(addressDto);
+                await _addressDomainService.Delete(address);
+                if (_notificationContext.HasNotifications)
+                    return;
+            }
         }
 
-        public Task<List<AddressDto>> GetAllAddressAsync()
+        public async Task<List<AddressDto>> GetAllAddressAsync()
         {
-            throw new NotImplementedException();
+            var addressList = await _addressDomainService.GetAll();
+
+            return _mapper.Map<List<AddressDto>>(addressList);
         }
 
-        public Task<AddressDto> GetById(Guid addressId)
+        public async Task<AddressDto> GetById(Guid addressId)
         {
-            throw new NotImplementedException();
+            var address = await _addressDomainService.GetById(addressId);
+
+            return _mapper.Map<AddressDto>(address);
         }
     }
 }

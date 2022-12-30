@@ -24,7 +24,7 @@
             </button>
 
             <button mat-icon-button color="warn" aria-label="Remover cliente">
-                <mat-icon>delete</mat-icon>
+                <mat-icon (click)="onDelete(customer)">delete</mat-icon>
             </button>
         </mat-cell>
     </ng-container>

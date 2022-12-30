@@ -11,7 +11,6 @@ import { CustomerFormComponent } from './Containers/customer-form/customer-form.
 import { ReactiveFormsModule } from '@angular/forms';
 import { CustomersListComponent } from './Components/customers-list/customers-list.component';
 
-
 @NgModule({
   declarations: [
     CustomersComponent,

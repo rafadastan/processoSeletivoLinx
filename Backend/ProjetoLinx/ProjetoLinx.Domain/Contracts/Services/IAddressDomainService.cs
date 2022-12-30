@@ -9,5 +9,7 @@ namespace ProjetoLinx.Domain.Contracts.Services
 {
     public interface IAddressDomainService : IBaseDomainService<Address, Guid>
     {
+        Task<Address> CreateAddress(Address address);
+        Task<Address> UpdateAddress(Address address);
     }
 }

@@ -8,6 +8,7 @@ namespace ProjetoLinx.Application.DTO
 {
     public class CustomerDto
     {
+        public Guid CustomerId { get; set; }
         public string Name { get; set; }
         public string Cpf { get; set; }
 

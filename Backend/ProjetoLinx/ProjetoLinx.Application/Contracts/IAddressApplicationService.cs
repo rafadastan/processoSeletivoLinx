@@ -9,9 +9,9 @@ namespace ProjetoLinx.Application.Contracts
 {
     public interface IAddressApplicationService
     {
-        Task<AddressDto> CreateAddressAsync(AddressDto address);
-        Task<AddressDto> UpdateAddressAsync(CustomerDto address);
-        Task<AddressDto> DeleteAddressAsync(Guid addressId);
+        Task<AddressDto> CreateAddressAsync(AddressDto addressDto);
+        Task<AddressDto> UpdateAddressAsync(AddressDto addressDto);
+        Task DeleteAddressAsync(Guid addressId);
 
         Task<List<AddressDto>> GetAllAddressAsync();
         Task<AddressDto> GetById(Guid addressId);
