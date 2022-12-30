@@ -73,12 +73,12 @@ namespace ProjetoLinx.Application.Services
             {
                 Name = customer.Name,
                 Cpf = customer.Cpf,
-                Street = customer?.Address.Street,
-                City = customer?.Address.City,
-                State = customer?.Address.State,
-                Neighborhood = customer?.Address.Neighborhood,
-                Number = customer?.Address.Number,
-                Cep = customer?.Address.Cep
+                Street = customer.Address.Street,
+                City = customer.Address.City,
+                State = customer.Address.State,
+                Neighborhood = customer.Address.Neighborhood,
+                Number = customer.Address.Number,
+                Cep = customer.Address.Cep
             };
 
             return _notificationContext.HasNotifications ? null : response;
